@@ -31,10 +31,19 @@ def index(segmentation):
     return index
 
 def number_of_tokens(index):
+    count = 0
+    for token in index:
+        count += index[token][0]
+    return count
+
+def size_of_vocabulary(index):
+    return len(index)
 
 file = open("../cacm.all",'r')
 lines = file.readlines()
 s = segmentation(lines)
 i = index(s)
 
+print(number_of_tokens(i))
+print(size_of_vocabulary(i))
 file.close()
