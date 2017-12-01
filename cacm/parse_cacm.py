@@ -54,7 +54,19 @@ file = open("../cacm.all",'r')
 lines = file.readlines()
 s = segmentation(lines)
 i = index(s)
+#print(i)
 
 print(number_of_tokens(s))
 print(size_of_vocabulary(i))
+
+### half of the collection
+numberOfDocuments = len(s)
+half = numberOfDocuments//2
+sHalf = s[:half]
+iHalf = index(sHalf)
+
+print(number_of_tokens(sHalf))
+print(size_of_vocabulary(iHalf))
+
+
 file.close()
