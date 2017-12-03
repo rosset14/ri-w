@@ -23,9 +23,11 @@ def number_of_tokens(segmentation):
 
 
 documents = []
-for element in os.listdir('../../pa1-data/0'):
-    file = open('../../pa1-data/0/' + str(element), 'r')
-    lines = file.readlines()
-    segmentation(lines, element)
+for directory in os.listdir('../../pa1-data'):
+    print(str(directory))
+    for element in os.listdir('../../pa1-data/' + str(directory)):
+        file = open('../../pa1-data/' + str(directory)+ '/' + str(element), 'r')
+        lines = file.readlines()
+        segmentation(lines, element)
 
 print(number_of_tokens(documents))
