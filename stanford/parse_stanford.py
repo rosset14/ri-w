@@ -14,6 +14,13 @@ def segmentation(lines, element):
                 documents[-1]["tokens"][tokLower] = 1
 
 
+def number_of_tokens(segmentation):
+    count = 0
+    for doc in segmentation:
+        for token in doc["tokens"]:
+            count += doc["tokens"][token]
+    return count
+
 
 documents = []
 for element in os.listdir('../../pa1-data/0'):
@@ -21,4 +28,4 @@ for element in os.listdir('../../pa1-data/0'):
     lines = file.readlines()
     segmentation(lines, element)
 
-print(documents[0])
+print(number_of_tokens(documents))
