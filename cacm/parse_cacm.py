@@ -1,4 +1,7 @@
 import re
+import math
+import numpy as np
+import matplotlib.pyplot as plt
 
 def segmentation(lines):
     content = False
@@ -47,14 +50,41 @@ def getCommonWords():
     commonFile = open("../common_words")
     return [s[:-1] for s in commonFile.readlines()]
 
-common = getCommonWords()
-print(common)
+def getFrequencies(index):
+    return [index[key][0] for key in index]
+
+"""def mergeSort(index):
+    if len(index) in[0,1]:
+        return index
+    else:
+        return merge(mergeSort(index[:len(index)//2]), mergeSort(index[len(index)//2:]))
+
+def merge(index1, index2):
+    result = []
+    i1, i2 =0, 0
+    while i1 < len(index1) or i2 < len(index2):
+        if i1 == len(index1):
+            result.append(index2[i2])
+            i2+=1
+        elif i2 == len(index2):
+            result.append(index1[i1])
+            i1+=1
+        else:
+            if(index1[i1][1] >= index2[i2][1]):
+                result.append(index1[i1])
+                i1 += 1
+            else:
+                result.append(index2[i2])
+                i2 += 1
+    return result"""
+
+common = [""] + getCommonWords()
+#print(common)
 
 file = open("../cacm.all",'r')
 lines = file.readlines()
 s = segmentation(lines)
 i = index(s)
-#print(i)
 
 print(number_of_tokens(s))
 print(size_of_vocabulary(i))
@@ -68,5 +98,20 @@ iHalf = index(sHalf)
 print(number_of_tokens(sHalf))
 print(size_of_vocabulary(iHalf))
 
+freq = getFrequencies(i)
+freq.sort()
+freq.reverse()
+print(freq)
+
+rank = [i+1 for i in range(len(freq))]
+
+plt.plot(np.array(rank),np.array(freq))
+plt.show()
+
+freqLog = [math.log(f) for f in freq]
+rankLog = [math.log(r) for r in rank]
+
+plt.plot(np.array(rankLog),np.array(freqLog))
+plt.show()
 
 file.close()
