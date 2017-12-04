@@ -2,7 +2,6 @@ import os
 import re
 from nltk.stem.wordnet import WordNetLemmatizer  # for lemmatization
 
-
 def segmentation(lines, element):
     documents.append({"id": str(element), "tokens": {}})
     for line in lines:
@@ -49,13 +48,22 @@ lem = WordNetLemmatizer()
 
 
 for directory in os.listdir('../../pa1-data'):
-    print(str(directory))
-    for element in os.listdir('../../pa1-data/' + str(directory)):
-        file = open('../../pa1-data/' + str(directory)+ '/' + str(element), 'r')
-        lines = file.readlines()
-        file.close()
-        segmentation(lines, element)
+    if not directory.startswith('.'):
+        print(str(directory))
+        for element in os.listdir('../../pa1-data/' + str(directory)):
+            file = open('../../pa1-data/' + str(directory)+ '/' + str(element), 'r')
+            lines = file.readlines()
+            file.close()
+            segmentation(lines, element)
+
 """
+for element in os.listdir('../../pa1-data/0')[:1]:
+    file = open('../../pa1-data/0/' + str(element), 'r')
+    lines = file.readlines()
+    segmentation(lines, element)
+    file.close()
+print(documents)
+
 
 for element in os.listdir('../../pa1-data/0'):
     file = open('../../pa1-data/0/' + str(element), 'r')
@@ -63,6 +71,7 @@ for element in os.listdir('../../pa1-data/0'):
     file.close()
     segmentation(lines, element)
 """
+
 #création de l'index inversé
 i = index(documents)
 
