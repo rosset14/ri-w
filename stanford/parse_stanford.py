@@ -47,7 +47,7 @@ common = getCommonWords()
 lem = WordNetLemmatizer()
 #phase de segmentation des documents
 
-"""
+
 for directory in os.listdir('../../pa1-data'):
     print(str(directory))
     for element in os.listdir('../../pa1-data/' + str(directory)):
@@ -60,8 +60,9 @@ for directory in os.listdir('../../pa1-data'):
 for element in os.listdir('../../pa1-data/0'):
     file = open('../../pa1-data/0/' + str(element), 'r')
     lines = file.readlines()
+    file.close()
     segmentation(lines, element)
-
+"""
 #création de l'index inversé
 i = index(documents)
 
