@@ -1,6 +1,6 @@
 import os
 import re
-from nltk.stem.wordnet import WordNetLemmatizer
+from nltk.stem.wordnet import WordNetLemmatizer  # for lemmatization
 
 def segmentation(lines, element):
     documents.append({"id": str(element), "tokens": {}})
@@ -8,10 +8,11 @@ def segmentation(lines, element):
         lineContent = re.split("\W+", line)[:-1]
         for token in lineContent:
             tokLower = token.lower()
-            if tokLower in documents[-1]["tokens"]:
-                documents[-1]["tokens"][tokLower] += 1
+            tokLem = lem.lemmatize(tokLower)
+            if tokLem in documents[-1]["tokens"]:
+                documents[-1]["tokens"][tokLem] += 1
             else:
-                documents[-1]["tokens"][tokLower] = 1
+                documents[-1]["tokens"][tokLem] = 1
 
 def index(segmentation):
     index = {}
@@ -42,6 +43,7 @@ def getCommonWords():
 
 documents = []
 common = getCommonWords()
+lem = WordNetLemmatizer()
 #phase de segmentation des documents
 
 
@@ -53,7 +55,6 @@ for directory in os.listdir('../../pa1-data'):
             lines = file.readlines()
             file.close()
             segmentation(lines, element)
-            print(documents)
 
 """
 for element in os.listdir('../../pa1-data/0')[:1]:
@@ -62,7 +63,14 @@ for element in os.listdir('../../pa1-data/0')[:1]:
     segmentation(lines, element)
     file.close()
 print(documents)
+
+
+for element in os.listdir('../../pa1-data/0'):
+    file = open('../../pa1-data/0/' + str(element), 'r')
+    lines = file.readlines()
+    segmentation(lines, element)
 """
+
 #création de l'index inversé
 i = index(documents)
 
