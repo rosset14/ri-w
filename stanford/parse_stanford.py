@@ -1,6 +1,6 @@
 import os
 import re
-from nltk.stem import WordNetLemmatizer  # for lemmatisation
+from nltk.stem.wordnet import WordNetLemmatizer  # for lemmatization
 
 
 def segmentation(lines, element):
