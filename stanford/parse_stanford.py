@@ -16,7 +16,7 @@ def segmentation(lines, element):
                  {"id": "doc 2", "tokens": {"le": 1; "ciel": 1}}]
 
     Nous avons choisi de passer par des dictionnaires plutot que par une liste de tupple (token, doc) a trier avant de
-    construire l'indexe inverse, car la gestion de la memoire se fait de facon automatique.
+    construire l'index inverse, car la gestion de la memoire se fait de facon automatique.
     """
     documents.append({"id": str(element), "tokens": {}})
     for line in lines:
