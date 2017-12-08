@@ -5,19 +5,33 @@ import matplotlib.pyplot as plt
 
 
 def segmentation(lines):
+    """
+        Cette fonction permet de construire une liste documents avec des dictionnaires (un par documents) avec les tokens du document et leur frequence.
+
+        :param lines: lignes du document a traiter
+
+        exemple : doc 1 : Le chat est vert, le chat est bleu.
+                  doc 2 : Le ciel
+
+        documents : [{"id": "doc 1", "tokens":{"le": 2; "chat": 2, "est": 2; "bleu": 1; "vert": 1}},
+                     {"id": "doc 2", "tokens": {"le": 1; "ciel": 1}}]
+
+        Nous avons choisi de passer par des dictionnaires plutot que par une liste de tupple (token, doc) a trier avant de
+        construire l'indexe inverse, car la gestion de la memoire se fait de facon automatique.
+        """
     content = False
     documents = []
     for line in lines:
         if line[:2] == ".I":
             documents.append({"id": int(line[3:]), "tokens": {}})
-        elif line[:2] in [".T", ".W", ".K"]:
+        elif line[:2] in [".T", ".W", ".K"]:  # sections de documents d'interet
             content = True
-        elif line[0] == ".":
+        elif line[0] == ".":  # autres section
             content = False
         elif content:
-            lineContent = re.split("\W+", line)[:-1]
+            lineContent = re.split("\W+", line)[:-1]  # traitement des sections d'interet
             for token in lineContent:
-                tokLower = token.lower()
+                tokLower = token.lower()  # on applique deja un traitement pour ne pas prendre en compte les majuscules
                 if tokLower in documents[-1]["tokens"]:
                     documents[-1]["tokens"][tokLower] += 1
                 else:

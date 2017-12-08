@@ -3,12 +3,27 @@ import re
 from nltk.stem.wordnet import WordNetLemmatizer  # for lemmatization
 
 def segmentation(lines, element):
+    """
+    Cette fonction permet d'ajouter a la liste documents les tokens du nouveau document regarde et leur frequence.
+
+    :param lines: lignes du document a traiter
+    :param element: titre du document
+
+    exemple : doc 1 : Le chat est vert, le chat est bleu.
+              doc 2 : Le ciel
+
+    documents : [{"id": "doc 1", "tokens":{"le": 2; "chat": 2, "est": 2; "bleu": 1; "vert": 1}},
+                 {"id": "doc 2", "tokens": {"le": 1; "ciel": 1}}]
+
+    Nous avons choisi de passer par des dictionnaires plutot que par une liste de tupple (token, doc) a trier avant de
+    construire l'indexe inverse, car la gestion de la memoire se fait de facon automatique.
+    """
     documents.append({"id": str(element), "tokens": {}})
     for line in lines:
         lineContent = re.split("\W+", line)[:-1]
         for token in lineContent:
-            tokLower = token.lower()
-            tokLem = lem.lemmatize(tokLower)
+            tokLower = token.lower()  # on applique deja un traitement pour ne pas prendre en compte les majuscules
+            tokLem = lem.lemmatize(tokLower)  # on applique ensuite un traitement de lemmatisation (plusieurs sont possibles)
             if tokLem in documents[-1]["tokens"]:
                 documents[-1]["tokens"][tokLem] += 1
             else:
@@ -64,13 +79,13 @@ for element in os.listdir('../../pa1-data/0')[:1]:
     file.close()
 print(documents)
 
-
+"""
 for element in os.listdir('../../pa1-data/0'):
     file = open('../../pa1-data/0/' + str(element), 'r')
     lines = file.readlines()
     file.close()
     segmentation(lines, element)
-"""
+
 
 #création de l'index inversé
 i = index(documents)
