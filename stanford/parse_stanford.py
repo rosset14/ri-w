@@ -1,5 +1,10 @@
 import os
 import re
+import math
+import matplotlib.pyplot as plt
+import numpy as np
+"""import nltk
+nltk.download()"""
 from nltk.stem.wordnet import WordNetLemmatizer  # for lemmatization
 
 def segmentation(lines, element):
@@ -48,13 +53,16 @@ lem = WordNetLemmatizer()
 
 
 for directory in os.listdir('../../pa1-data'):
-    if not directory.startswith('.'):
+    if directory[0] not in ['.']:  #['.', '5', '6', '7', '8', '9']:  # for half of the collection
         print(str(directory))
         for element in os.listdir('../../pa1-data/' + str(directory)):
             file = open('../../pa1-data/' + str(directory)+ '/' + str(element), 'r')
             lines = file.readlines()
             file.close()
             segmentation(lines, element)
+
+def getFrequencies(index):
+    return [index[key][0] for key in index]
 
 """
 for element in os.listdir('../../pa1-data/0')[:1]:
@@ -75,4 +83,19 @@ for element in os.listdir('../../pa1-data/0'):
 #création de l'index inversé
 i = index(documents)
 
+print(number_of_tokens(documents))
 print(size_of_vocabulary(i))
+
+freq = getFrequencies(i)
+freq.sort()
+freq.reverse()
+print(freq)
+
+rank = [i+1 for i in range(len(freq))]
+
+
+freqLog = [math.log(f) for f in freq]
+rankLog = [math.log(r) for r in rank]
+
+plt.plot(np.array(rankLog), np.array(freqLog))
+plt.show()
