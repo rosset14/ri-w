@@ -88,11 +88,11 @@ for element in os.listdir('../../pa1-data/0')[:1]:
 print(documents)
 
 """
-for element in os.listdir('../../pa1-data/0'):
+"""for element in os.listdir('../../pa1-data/0'):
     file = open('../../pa1-data/0/' + str(element), 'r')
     lines = file.readlines()
     file.close()
-    segmentation(lines, element)
+    segmentation(lines, element)"""
 
 
 #création de l'index inversé

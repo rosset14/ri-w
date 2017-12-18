@@ -2,6 +2,7 @@ import re
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+from nltk.stem.wordnet import WordNetLemmatizer  # for lemmatization
 
 
 def segmentation(lines):
@@ -20,10 +21,13 @@ def segmentation(lines):
         construire l'index inverse, car la gestion de la memoire se fait de facon automatique.
         """
     content = False
-    documents = []
+    buffer = []
+    term_termID = {}
+    next_termID = 0
+    docID = -1
     for line in lines:
         if line[:2] == ".I":
-            documents.append({"id": int(line[3:]), "tokens": {}})
+            docID = int(line[3:])
         elif line[:2] in [".T", ".W", ".K"]:  # sections de documents d'interet
             content = True
         elif line[0] == ".":  # autres section
@@ -32,29 +36,41 @@ def segmentation(lines):
             lineContent = re.split("\W+", line)[:-1]  # traitement des sections d'interet
             for token in lineContent:
                 tokLower = token.lower()  # on applique deja un traitement pour ne pas prendre en compte les majuscules
-                if tokLower in documents[-1]["tokens"]:
-                    documents[-1]["tokens"][tokLower] += 1
-                else:
-                    documents[-1]["tokens"][tokLower] = 1
-    return documents
+                if not tokLower in common:
+                    tokLem = lem.lemmatize(tokLower)  # on applique ensuite un traitement de lemmatisation (plusieurs sont possibles)
+                    if tokLem in term_termID:
+                        termID = term_termID[tokLem]
+                    else:
+                        termID = next_termID
+                        term_termID[tokLem] = termID
+                        next_termID += 1
+                    buffer.append((termID, docID))
+    return buffer, term_termID
 
 
-def index(segmentation):
+def index(buffer):
     """
     creation de l'index inverse a partir des dictionnaires de token de chaque document
     :param segmentation: dictionnaires de token de chaque document
     :return: index inverse
     """
     index = {}
-    for doc in segmentation:
-        for token in doc["tokens"]:
-            if not (token in common):  # on retire les tokens inutiles
-                if token in index:
-                    index[token][0] += doc["tokens"][token]  # ajoute a la frequence du token sa frequence d'apparition dans ce document
-                    index[token].append((doc["id"], doc["tokens"][token]))  # il nous serait aussi possible de garder en memoire la frequence pour chacun des documents
-                else:
-                    index[token] = [doc["tokens"][token], (doc["id"], doc["tokens"][token])]
-
+    current_termID = -1
+    for t in buffer:
+        if t[0] == current_termID:
+            index[current_termID][0] += 1  # ajoute a la frequence du token sa frequence d'apparition dans ce document
+            found = -1
+            for i in range(1, len(index[current_termID])):
+                if index[current_termID][i][0] == t[1]:
+                    found = i
+                    break
+            if found == -1:
+                index[current_termID].append((t[1], 1))
+            else:
+                index[current_termID][i] = (index[current_termID][i][0], index[current_termID][i][1] + 1)
+        else:
+            current_termID = t[0]
+            index[current_termID] = [1, (t[1], 1)]
     return index
 
 
@@ -90,6 +106,8 @@ def getFrequencies(index):
     """
     return [index[key][0] for key in index]
 
+lem = WordNetLemmatizer()
+
 # liste des mots courants
 common = [""] + getCommonWords()
 
@@ -99,8 +117,19 @@ lines = file.readlines()
 
 # creation de l'index inverse
 s = segmentation(lines)
-i = index(s)
+term_termID = s[1]
+i = index(sorted(s[0]))
 
+print(term_termID)
+print(i)
+file.close()
+
+file_index = open("../index_cacm.txt", 'w')
+file_index.write(str(term_termID) + "\n")
+file_index.write(str(i))
+file_index.close()
+
+"""
 # estimations
 print(number_of_tokens(s))
 print(size_of_vocabulary(i))
@@ -132,4 +161,4 @@ rankLog = [math.log(r) for r in rank]
 plt.plot(np.array(rankLog),np.array(freqLog))
 plt.show()
 
-file.close()
+file.close()"""
