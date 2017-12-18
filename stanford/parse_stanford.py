@@ -7,7 +7,7 @@ import numpy as np
 nltk.download()"""
 from nltk.stem.wordnet import WordNetLemmatizer  # for lemmatization
 
-def segmentation(lines, element):
+def segmentation(lines, docID, buffer, term_termID, next_termID):
     """
     Cette fonction permet d'ajouter a la liste documents les tokens du nouveau document regarde et leur frequence.
 
@@ -23,16 +23,21 @@ def segmentation(lines, element):
     Nous avons choisi de passer par des dictionnaires plutot que par une liste de tupple (token, doc) a trier avant de
     construire l'index inverse, car la gestion de la memoire se fait de facon automatique.
     """
-    documents.append({"id": str(element), "tokens": {}})
+    nextID = next_termID
     for line in lines:
         lineContent = re.split("\W+", line)[:-1]
         for token in lineContent:
             tokLower = token.lower()  # on applique deja un traitement pour ne pas prendre en compte les majuscules
-            tokLem = lem.lemmatize(tokLower)  # on applique ensuite un traitement de lemmatisation (plusieurs sont possibles)
-            if tokLem in documents[-1]["tokens"]:
-                documents[-1]["tokens"][tokLem] += 1
-            else:
-                documents[-1]["tokens"][tokLem] = 1
+            if not tokLower in common:
+                tokLem = lem.lemmatize(tokLower)  # on applique ensuite un traitement de lemmatisation (plusieurs sont possibles)
+                if tokLem in term_termID:
+                    termID = term_termID[tokLem]
+                else:
+                    termID = nextID
+                    term_termID[tokLem] = termID
+                    nextID += 1
+                buffer.append((termID, docID))
+    return nextID
 
 def index(segmentation):
     index = {}
@@ -60,22 +65,6 @@ def getCommonWords():
     commonFile = open("../common_words")
     return [s[:-1] for s in commonFile.readlines()]
 
-
-documents = []
-common = getCommonWords()
-lem = WordNetLemmatizer()
-#phase de segmentation des documents
-
-
-for directory in os.listdir('../../pa1-data'):
-    if directory[0] not in ['.']:  #['.', '5', '6', '7', '8', '9']:  # for half of the collection
-        print(str(directory))
-        for element in os.listdir('../../pa1-data/' + str(directory)):
-            file = open('../../pa1-data/' + str(directory)+ '/' + str(element), 'r')
-            lines = file.readlines()
-            file.close()
-            segmentation(lines, element)
-
 def getFrequencies(index):
     return [index[key][0] for key in index]
 
@@ -95,6 +84,43 @@ print(documents)
     segmentation(lines, element)"""
 
 
+common = [""] + getCommonWords()
+lem = WordNetLemmatizer()
+#phase de segmentation des documents
+
+def make_blocks_buffers():
+    term_termID = {}
+    next_termID = 0
+    doc_docID = {}
+    next_docID = 0
+
+    for directory in os.listdir('../../pa1-data'):
+        if directory[0] not in ['.']:  #['.', '5', '6', '7', '8', '9']:  # for half of the collection
+            print(str(directory))
+            buffer = []
+            for element in os.listdir('../../pa1-data/' + str(directory)):
+                file = open('../../pa1-data/' + str(directory)+ '/' + str(element), 'r')
+                lines = file.readlines()
+                file.close()
+                docID = next_docID
+                next_docID += 1
+                doc_docID[docID] = str(directory)+ '/' + str(element)
+                next_termID = segmentation(lines, docID, buffer, term_termID, next_termID)
+            print(buffer)
+            buffer_file = open("../standford_buffer_" + str(directory)[0] + ".txt", 'w')
+            buffer_file.write(str(buffer))
+            buffer_file.close()
+    term_termID_file = open("../standford_termIDs.txt", 'w')
+    term_termID_file.write(str(term_termID))
+    term_termID_file.close()
+    doc_docID_file = open("../standford_docIDs.txt", 'w')
+    doc_docID_file.write(str(doc_docID))
+    doc_docID_file.close()
+
+
+make_blocks_buffers()
+
+"""
 #création de l'index inversé
 i = index(documents)
 
@@ -114,3 +140,4 @@ rankLog = [math.log(r) for r in rank]
 
 plt.plot(np.array(rankLog), np.array(freqLog))
 plt.show()
+"""
