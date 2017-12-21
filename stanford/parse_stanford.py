@@ -116,7 +116,7 @@ def make_blocks_buffers():
                 next_termID = segmentation(lines, docID, buffer, term_termID, next_termID)
             print(buffer)
             buffer_file = open("../standford_buffer_" + str(directory)[0] + ".txt", 'w')
-            buffer_file.write(str(buffer))
+            buffer_file.write(str(sorted(buffer)))
             buffer_file.close()
     term_termID_file = open("../standford_termIDs.txt", 'w')
     term_termID_file.write(str(term_termID))
@@ -128,7 +128,7 @@ def make_blocks_buffers():
 
 #make_blocks_buffers()
 
-for i in range(1, 10):
+"""for i in range(1, 10):
     print(i)
     file = open("../standford_buffer_" + str(i) + ".txt", 'r')
     line = file.readlines()[0]
@@ -137,7 +137,7 @@ for i in range(1, 10):
     postings.sort()
     sorted_file = open("../standford_buffer_sorted_" + str(i) + ".txt", 'w')
     sorted_file.write(str(postings))
-    sorted_file.close()
+    sorted_file.close()"""
 
 
 """
