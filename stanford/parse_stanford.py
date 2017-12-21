@@ -7,6 +7,7 @@ import numpy as np
 nltk.download()"""
 from nltk.stem.wordnet import WordNetLemmatizer  # for lemmatization
 
+
 def segmentation(lines, docID, buffer, term_termID, next_termID):
     """
     Cette fonction permet d'ajouter a la liste documents les tokens du nouveau document regarde et leur frequence.
@@ -29,7 +30,8 @@ def segmentation(lines, docID, buffer, term_termID, next_termID):
         for token in lineContent:
             tokLower = token.lower()  # on applique deja un traitement pour ne pas prendre en compte les majuscules
             if not tokLower in common:
-                tokLem = lem.lemmatize(tokLower)  # on applique ensuite un traitement de lemmatisation (plusieurs sont possibles)
+                tokLem = lem.lemmatize(tokLower)  # on applique ensuite un traitement de lemmatisation
+                                                    # (plusieurs sont possibles)
                 if tokLem in term_termID:
                     termID = term_termID[tokLem]
                 else:
@@ -38,6 +40,7 @@ def segmentation(lines, docID, buffer, term_termID, next_termID):
                     nextID += 1
                 buffer.append((termID, docID))
     return nextID
+
 
 def index(segmentation):
     index = {}
@@ -51,6 +54,7 @@ def index(segmentation):
                     index[token] = [doc["tokens"][token], (doc["id"], doc["tokens"][token])]
     return index
 
+
 def number_of_tokens(segmentation):
     count = 0
     for doc in segmentation:
@@ -58,12 +62,15 @@ def number_of_tokens(segmentation):
             count += doc["tokens"][token]
     return count
 
+
 def size_of_vocabulary(index):
     return len(index)
+
 
 def getCommonWords():
     commonFile = open("../common_words")
     return [s[:-1] for s in commonFile.readlines()]
+
 
 def getFrequencies(index):
     return [index[key][0] for key in index]
@@ -87,6 +94,7 @@ print(documents)
 common = [""] + getCommonWords()
 lem = WordNetLemmatizer()
 #phase de segmentation des documents
+
 
 def make_blocks_buffers():
     term_termID = {}
@@ -118,7 +126,19 @@ def make_blocks_buffers():
     doc_docID_file.close()
 
 
-make_blocks_buffers()
+#make_blocks_buffers()
+
+for i in range(1, 10):
+    print(i)
+    file = open("../standford_buffer_" + str(i) + ".txt", 'r')
+    line = file.readlines()[0]
+    file.close()
+    postings = eval(line)
+    postings.sort()
+    sorted_file = open("../standford_buffer_sorted_" + str(i) + ".txt", 'w')
+    sorted_file.write(str(postings))
+    sorted_file.close()
+
 
 """
 #création de l'index inversé
