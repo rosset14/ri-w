@@ -153,7 +153,7 @@ def merge_block_buffers():
                 docs[posting[1]] = 1
         print("buffer read")
     for key in index:
-        index[key] = index[key][0] + sorted(index[key][1:])
+        index[key] = [index[key][0]] + sorted(index[key][1:])
     index_file = open("../standford_index.txt", "w")
     index_file.write(str(index))
     index_file.close()
