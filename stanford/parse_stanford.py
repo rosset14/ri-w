@@ -125,8 +125,45 @@ def make_blocks_buffers():
     doc_docID_file.write(str(doc_docID))
     doc_docID_file.close()
 
+def merge_block_buffers():
+    index = {}
+    for i in range(10):
+        file_buffer = open("../standford_buffer_sorted_" + str(i) + ".txt", 'r')
+        buffer = eval(file_buffer.readlines()[0])
+        file_buffer.close()
+        print("file read")
+        freq = 0
+        docs = {}
+        current = 0
+        for posting in buffer:
+            if posting[0] != current:
+                if freq > 0:
+                    if current not in index :
+                        index[current] = [freq] + [(docID, docs[docID]) for docID in docs]
+                    else:
+                        index[current] = [index[current][0] + freq] + index[current][1:] + [(docID, docs[docID]) for
+                                                                                            docID in docs]
+                freq = 0
+                docs = {}
+                current = posting[0]
+            freq += 1
+            if posting[1] in docs:
+                docs[posting[1]] += 1
+            else:
+                docs[posting[1]] = 1
+        print("buffer read")
+    for key in index:
+        index[key] = index[key][0] + sorted(index[key][1:])
+    index_file = open("../standford_index.txt", "w")
+    index_file.write(str(index))
+    index_file.close()
+
+
+
 
 #make_blocks_buffers()
+
+merge_block_buffers()
 
 """for i in range(1, 10):
     print(i)
