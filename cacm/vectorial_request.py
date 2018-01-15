@@ -38,6 +38,33 @@ def vectorial_search_cacm(query, number_of_documents):
     :return:
     """
     parsed_query = parse_query(query)
+    w = {-1: {}}
+    s = CACM_NUMBER_OF_DOCS * [0]
+    for termID in parsed_query:
+        nb = parsed_query.count(termID)
+        w[-1][termID] = (1 + math.log10(nb)) * math.log10(CACM_NUMBER_OF_DOCS/index[termID][0])
+        postings = index[termID][1:]
+        for tup in postings:
+            docID, freq = tup[0], tup[1]
+            if docID not in w:
+                w[docID] = {}
+            if freq == 0:
+                w[docID][termID] = 0
+            else:
+                w[docID][termID] = (1 + math.log10(freq)) * math.log10(CACM_NUMBER_OF_DOCS / index[termID][0])
+            s[docID] += w[docID][termID]*w[-1][termID]
+    best_documents = np.argsort(s)[::-1][:number_of_documents]
+    return [docID for docID in best_documents if s[docID] > 0]
+
+
+def vectorial_search_cacm_normalized(query, number_of_documents):
+    """
+    Retrieves the 'best' number_of_documents corresponding to the query
+    :param query: the raw user query
+    :param number_of_documents: the number of documents we want to retrieve
+    :return:
+    """
+    parsed_query = parse_query(query)
     w = {-1: {"tot": 0}}
     s = CACM_NUMBER_OF_DOCS * [0]
     for termID in parsed_query:
@@ -55,7 +82,6 @@ def vectorial_search_cacm(query, number_of_documents):
                 w[docID][termID] = (1 + math.log10(freq)) * math.log10(CACM_NUMBER_OF_DOCS / index[termID][0])
             w[docID]["tot"] += w[docID][termID]**2
             s[docID] += w[docID][termID]*w[-1][termID]
-    print(w)
     nq = math.sqrt(w[-1]["tot"])
     for j in range(CACM_NUMBER_OF_DOCS):
         if s[j] != 0:
@@ -74,5 +100,8 @@ termID_file.close()
 term_termID = eval(lines[0])
 index = eval(lines[1])
 
-nlp = vectorial_search_cacm("natural language processing", 20)
-print(nlp)
+nlp1 = vectorial_search_cacm("natural language processing", 20)
+nlp2 = vectorial_search_cacm_normalized("natural language processing", 20)
+print(nlp1)
+print(nlp2)
+print(nlp1 == nlp2)
