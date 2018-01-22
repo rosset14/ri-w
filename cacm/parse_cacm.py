@@ -2,13 +2,20 @@ import re
 import math
 import numpy as np
 import matplotlib.pyplot as plt
-from nltk.stem.wordnet import WordNetLemmatizer  # for lemmatization
+from nltk.stem.wordnet import WordNetLemmatizer  # pour la lemmatisation
 import time
 
 
 def segmentation(lines):
-    content = False
-    title = False
+    """
+    A partir des documents, on créé le dictionnaire de terme/ termeID et de documentID/ titre ainsi que
+    la liste des paires (termeID, documentID) pour ensuite construire l'index, selon l'algorithme BSBI.
+    :param lines: l'ensembles de documents de la collection sous forme d'une liste de lignes
+    :return: le buffer c'est à dire la liste des paires (termeID, documentID), le dictionnaire de termes/ termesID
+    et le dictionnaire de documentID/titre
+    """
+    content = False  # pour les sections d'interet
+    title = False  # pour le titre
     buffer = []
     term_termID = {}
     docID_doc = {}
@@ -17,10 +24,13 @@ def segmentation(lines):
     for line in lines:
         if line[:2] == ".I":
             docID = int(line[3:])
-        elif line[:2] in [".T", ".W", ".K"]:  # sections de documents d'interet
+        elif line[:2] in [".T", ".W", ".K"]:
+            # sections de documents d'interet, remarquons que les auteurs ne sont pas pris en compte
             content = True
             if line[:2] == ".T":  # titre du document à stocker dans docID_doc est à la prochaine ligne
                 title = True
+            else :
+                title = False
         elif line[0] == ".":  # autres section
             content = False
             title = False
@@ -28,7 +38,7 @@ def segmentation(lines):
             lineContent = re.split("\W+", line)[:-1]  # traitement des sections d'interet
             for token in lineContent:
                 tokLower = token.lower()  # on applique deja un traitement pour ne pas prendre en compte les majuscules
-                if not tokLower in common:
+                if not tokLower in common:  # seuls les mots qui ne sont pas communs sont considérés
                     tokLem = lem.lemmatize(tokLower)  # on applique ensuite un traitement de lemmatisation (plusieurs sont possibles)
                     if tokLem in term_termID:
                         termID = term_termID[tokLem]
@@ -45,50 +55,53 @@ def segmentation(lines):
 def index(buffer):
     """
     creation de l'index inverse a partir des dictionnaires de token de chaque document
-    :param segmentation: dictionnaires de token de chaque document
+    :param segmentation: liste de token de chaque document
     :return: index inverse
     """
     index = {}
     current_termID = -1
     for t in buffer:
-        if t[0] == current_termID:
-            index[current_termID][0] += 1  # ajoute a la frequence du token sa frequence d'apparition dans ce document
+        if t[0] == current_termID:  # si ce terme à déjà été rencontré :
+            index[current_termID][0] += 1  # ajoute a la frequence du token sa frequence d'apparition de ce terme
             found = -1
             for i in range(1, len(index[current_termID])):
-                if index[current_termID][i][0] == t[1]:
-                    found = i
+                if index[current_termID][i][0] == t[1]:  # si on  déjà rencontré la même paire de term, doc
+                    found = i  # alors on prend la position dans l'index qui correspond
                     break
             if found == -1:
-                index[current_termID].append((t[1], 1))
+                index[current_termID].append((t[1], 1))  # si ça n'a pas été trouvé, on ajoute le document avec
+                # une fréquence de 1 pour le terme considéré
             else:
                 index[current_termID][i] = (index[current_termID][i][0], index[current_termID][i][1] + 1)
-        else:
+                # sinon on incrémente simplement la fréquence d'appartition de ce terme dans le document
+        else:  # si c'est la première fois que ce terme est rencontré
             current_termID = t[0]
             index[current_termID] = [1, (t[1], 1)]
     return index
 
 
-def number_of_tokens(segmentation):
+def number_of_tokens(segmetation):
     """
     determine le nombre de token de la collection
     :param segmentation:
     :return: nombre de tokens de la collection
     """
-    count = 0
-    for doc in segmentation:
-        for token in doc["tokens"]:
-            count += doc["tokens"][token]  # on compte le nombre de token grace a leur frequence dans chaque document
-    return count
+    return len(segmentation)
 
 
 def size_of_vocabulary(index):
+    """
+    détermine la taille du vocabulaire
+    :param index:
+    :return: taille du vocabulaire, ie nombre de termes différents
+    """
     return len(index)
 
 
 def getCommonWords():
     """
     recupere la liste des mots communs afin de les retirer de l'index
-    :return:
+    :return: liste des mots communs
     """
     commonFile = open("../common_words")
     return [s[:-1] for s in commonFile.readlines()]
@@ -103,9 +116,11 @@ def getFrequencies(index):
 
 
 
-# CREATION OF THE INDEX FOR CACM COLLECTION:
+# CREATION DE L'INDEX POUR LA COLLECTION CACM:
+
 t1 = time.time()
 
+# pour la lemmatisation
 lem = WordNetLemmatizer()
 
 # liste des mots courants

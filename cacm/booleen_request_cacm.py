@@ -1,6 +1,6 @@
 import time
 from math import sqrt
-from nltk.stem.wordnet import WordNetLemmatizer  # for lemmatization
+from nltk.stem.wordnet import WordNetLemmatizer  # pour la lemmatisation
 
 # import the index
 file = open('../index_cacm.txt', 'r')
