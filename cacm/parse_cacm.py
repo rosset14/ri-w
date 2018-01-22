@@ -3,26 +3,15 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 from nltk.stem.wordnet import WordNetLemmatizer  # for lemmatization
+import time
 
 
 def segmentation(lines):
-    """
-        Cette fonction permet de construire une liste documents avec des dictionnaires (un par documents) avec les tokens du document et leur frequence.
-
-        :param lines: lignes du document a traiter
-
-        exemple : doc 1 : Le chat est vert, le chat est bleu.
-                  doc 2 : Le ciel
-
-        documents : [{"id": "doc 1", "tokens":{"le": 2; "chat": 2, "est": 2; "bleu": 1; "vert": 1}},
-                     {"id": "doc 2", "tokens": {"le": 1; "ciel": 1}}]
-
-        Nous avons choisi de passer par des dictionnaires plutot que par une liste de tupple (token, doc) a trier avant de
-        construire l'index inverse, car la gestion de la memoire se fait de facon automatique.
-        """
     content = False
+    title = False
     buffer = []
     term_termID = {}
+    docID_doc = {}
     next_termID = 0
     docID = -1
     for line in lines:
@@ -30,8 +19,11 @@ def segmentation(lines):
             docID = int(line[3:])
         elif line[:2] in [".T", ".W", ".K"]:  # sections de documents d'interet
             content = True
+            if line[:2] == ".T":  # titre du document à stocker dans docID_doc est à la prochaine ligne
+                title = True
         elif line[0] == ".":  # autres section
             content = False
+            title = False
         elif content:
             lineContent = re.split("\W+", line)[:-1]  # traitement des sections d'interet
             for token in lineContent:
@@ -45,7 +37,9 @@ def segmentation(lines):
                         term_termID[tokLem] = termID
                         next_termID += 1
                     buffer.append((termID, docID))
-    return buffer, term_termID
+            if title:
+                docID_doc[docID] = line[:-1]
+    return buffer, term_termID, docID_doc
 
 
 def index(buffer):
@@ -106,6 +100,12 @@ def getFrequencies(index):
     """
     return [index[key][0] for key in index]
 
+
+
+
+# CREATION OF THE INDEX FOR CACM COLLECTION:
+t1 = time.time()
+
 lem = WordNetLemmatizer()
 
 # liste des mots courants
@@ -114,20 +114,38 @@ common = [""] + getCommonWords()
 # recuperation de la collection
 file = open("../cacm.all", 'r')
 lines = file.readlines()
-
-# creation de l'index inverse
-s = segmentation(lines)
-term_termID = s[1]
-i = index(sorted(s[0]))
-
-print(term_termID)
-print(i)
 file.close()
 
+
+# creation de l'index inverse, du dictionnaire de termes et du dictionnaire de documents
+s = segmentation(lines)
+
+term_termID = s[1]
+docID_doc = s[2]
+i = index(sorted(s[0]))
+
+
+# sauvegarde de l'index inverse
 file_index = open("../index_cacm.txt", 'w')
-file_index.write(str(term_termID) + "\n")
 file_index.write(str(i))
 file_index.close()
+# sauvegarde du dictionnaire de termes
+file_terms = open("../terms_cacm.txt", 'w')
+file_terms.write(str(term_termID))
+file_terms.close()
+# sauvegarde du dictionnaire de documents
+file_docs = open("../docs_cacm.txt", 'w')
+file_docs.write(str(docID_doc))
+file_docs.close()
+
+t2 = time.time()
+
+print(t2 - t1)
+
+
+
+
+
 
 """
 # estimations
