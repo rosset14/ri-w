@@ -3,35 +3,27 @@ import re
 import math
 import matplotlib.pyplot as plt
 import numpy as np
-"""import nltk
-nltk.download()"""
-from nltk.stem.wordnet import WordNetLemmatizer  # for lemmatization
+from nltk.stem.wordnet import WordNetLemmatizer  # pour la lemmatisation
 
 
 def segmentation(lines, docID, buffer, term_termID, next_termID):
     """
-    Cette fonction permet d'ajouter a la liste documents les tokens du nouveau document regarde et leur frequence.
-
-    :param lines: lignes du document a traiter
-    :param element: titre du document
-
-    exemple : doc 1 : Le chat est vert, le chat est bleu.
-              doc 2 : Le ciel
-
-    documents : [{"id": "doc 1", "tokens":{"le": 2; "chat": 2, "est": 2; "bleu": 1; "vert": 1}},
-                 {"id": "doc 2", "tokens": {"le": 1; "ciel": 1}}]
-
-    Nous avons choisi de passer par des dictionnaires plutot que par une liste de tupple (token, doc) a trier avant de
-    construire l'index inverse, car la gestion de la memoire se fait de facon automatique.
+    A partir d'un document, on remplit un buffer selon l'algorithme BSBI.
+    :param lines: les lignes qui forment le document
+    :param docID: l'id du document
+    :param buffer: la liste de couple (termeID, docID)
+    :param term_termID: le dictionnaire de termes et de leurs ids
+    :param next_termID: le prochain ID libre pour les termes
+    :return: nextID qui est le prochain ID libre pour les termes, après l'appel à la fonction
     """
     nextID = next_termID
     for line in lines:
         lineContent = re.split("\W+", line)[:-1]
         for token in lineContent:
             tokLower = token.lower()  # on applique deja un traitement pour ne pas prendre en compte les majuscules
-            if not tokLower in common:
+            if not tokLower in common:  # on enlève les mots communs
                 tokLem = lem.lemmatize(tokLower)  # on applique ensuite un traitement de lemmatisation
-                                                    # (plusieurs sont possibles)
+                                                  # (plusieurs sont possibles)
                 if tokLem in term_termID:
                     termID = term_termID[tokLem]
                 else:
@@ -43,6 +35,11 @@ def segmentation(lines, docID, buffer, term_termID, next_termID):
 
 
 def index(segmentation):
+    """
+        creation de l'index inverse a partir du buffer
+        :param segmentation: liste de couple (terme, document)
+        :return: index inverse
+        """
     index = {}
     for doc in segmentation:
         for token in doc["tokens"]:
@@ -56,47 +53,52 @@ def index(segmentation):
 
 
 def number_of_tokens(segmentation):
-    count = 0
-    for doc in segmentation:
-        for token in doc["tokens"]:
-            count += doc["tokens"][token]
-    return count
+    """
+    Renvoie le nombre de tokens dans la collection à partir de la segmentation
+    :param segmentation: liste de couple (terme, document)
+    :return: nombre de tokens dans la collection
+    """
+    return len(segmentation)
 
 
 def size_of_vocabulary(index):
+    """
+    Donne la taile du vocabulaire
+    :param index: index inversé sur la collection
+    :return: taille du vocabulaire sur la collection
+    """
     return len(index)
 
 
 def getCommonWords():
+    """
+    Renvoie la liste des mots communs
+    :return: liste des mots communs
+    """
     commonFile = open("../common_words")
     return [s[:-1] for s in commonFile.readlines()]
 
 
 def getFrequencies(index):
+    """
+    Renvoie la liste des fréquence d'apparition des termes de l'index dans les documenst de la collection
+    :param index: index inversé sur la collection
+    :return: liste des fréquences des termes
+    """
     return [index[key][0] for key in index]
-
-"""
-for element in os.listdir('../../pa1-data/0')[:1]:
-    file = open('../../pa1-data/0/' + str(element), 'r')
-    lines = file.readlines()
-    segmentation(lines, element)
-    file.close()
-print(documents)
-
-"""
-"""for element in os.listdir('../../pa1-data/0'):
-    file = open('../../pa1-data/0/' + str(element), 'r')
-    lines = file.readlines()
-    file.close()
-    segmentation(lines, element)"""
 
 
 common = [""] + getCommonWords()
 lem = WordNetLemmatizer()
-#phase de segmentation des documents
 
+
+# PHASE DE SEGMENTATION DES DOCUMENTS
 
 def make_blocks_buffers():
+    """
+    création de 9 buffers, ie liste de couple (termID, docID) qui sont sauvés dans des fichiers
+    :return:
+    """
     term_termID = {}
     next_termID = 0
     doc_docID = {}
@@ -125,7 +127,14 @@ def make_blocks_buffers():
     doc_docID_file.write(str(doc_docID))
     doc_docID_file.close()
 
+
+# PHASE DE CONSTRUCTION DE L'INDEX
 def merge_block_buffers():
+    """
+    On fusionne les buffers sauvés dans des fichiers, puis on construit l'index inversé sur la collection,
+    que l'on sauve dans un fichier
+    :return:
+    """
     index = {}
     for i in range(10):
         file_buffer = open("../standford_buffer_sorted_" + str(i) + ".txt", 'r')
@@ -157,8 +166,6 @@ def merge_block_buffers():
     index_file = open("../standford_index.txt", "w")
     index_file.write(str(index))
     index_file.close()
-
-
 
 
 #make_blocks_buffers()

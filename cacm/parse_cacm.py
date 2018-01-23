@@ -54,8 +54,8 @@ def segmentation(lines):
 
 def index(buffer):
     """
-    creation de l'index inverse a partir des dictionnaires de token de chaque document
-    :param segmentation: liste de token de chaque document
+    creation de l'index inverse a partir du buffer
+    :param segmentation: liste couple (token, document)
     :return: index inverse
     """
     index = {}
