@@ -5,36 +5,27 @@ from nltk.stem.wordnet import WordNetLemmatizer  # pour la lemmatisation
 
 # IMPORT DE FICHIERS ---------------------------------------------------------------------------------------------------
 
-# import de l'index
-file = open('../index_cacm.txt', 'r')
-lines = file.readlines()
-file.close()
-index = eval(lines[0])
 
 # import du dictionnaire des termes et de leurs ID
-file = open('../terms_cacm.txt', 'r')
+file = open('../stanford_termsIDs.txt', 'r')
 lines = file.readlines()
 file.close()
 terms_id = eval(lines[0])
 
 # import du dictionnaire des documents et de leurs titres
-file = open('../docs_cacm.txt', 'r')
+file = open('../stanford_docIDs.txt', 'r')
 lines = file.readlines()
 file.close()
 docs_id = eval(lines[0])
 
-# import de requêtes booléennes pour l'évaluation
-file = open('../boolean_cacm_requests.txt', 'r')
-req = file.readlines()
+# import de l'index
+file = open('../stanford_index.txt', 'r')
+lines = file.readlines()
 file.close()
-
-# import des réponses attendues à ces requêtes
-file = open('../qrels.text', 'r')
-ans = file.readlines()
-file.close()
+index = eval(lines[0])
 
 
-number_of_documents = 3204 # quand NOT est utilisé, il faut retourner la liste complémentaire de documents
+number_of_documents = 88998 # quand NOT est utilisé, il faut retourner la liste complémentaire de documents
 lem = WordNetLemmatizer()
 
 # RECUPERATION DE REQUETES ---------------------------------------------------------------------------------------------
@@ -60,7 +51,7 @@ def not_request(posting):
     :param posting: la liste des documents cntenant le mot d'intérêt
     :return: la liste complémentaire, ie les documents ne contenant pas le mot d'intérêt
     """
-    list_doc = list(range(1, number_of_documents + 1)) # liste de tous les documents de CACM
+    list_doc = list(range(1, number_of_documents + 1)) # liste de tous les documents de la collection Stanford
     if posting is None:  # si un mot de la requête ne correspond à aucun mot de l'index ...
         return list_doc  # ... on renvoie l'ensemble des documents
     for i in reversed(range(len(posting))):
@@ -179,7 +170,7 @@ def get_posting(word):
 
 def manage_boolean_request(req):
     """
-    A partir de la requête de l'utilisateur, on trouve la liste de documents correespondants dans la collection CACM
+    A partir de la requête de l'utilisateur, on trouve la liste de documents correspondants dans la collection Stanford
     :param req: la requête de l'utilisateur (str)
     :return: liste de documents correspondants
     """
@@ -288,41 +279,4 @@ def request_display():
         print("     document n°" + str(d) + " : " + docs_id[d])
 
 
-# EVALUATION / TESTS ---------------------------------------------------------------------------------------------------
-def eval():
-    """
-    On prend les 20 requêtes booléennes du fichier boolean_cacm_requests. On trouve les documents correspondants,
-    que l'on compare avec les réponses attendues. On peut ainsi calculer la précision et le rappel pour chaque requête.
-    :return: liste des précisions et la liste des rappels pour les 20 requêtes
-    """
-    n = len(req)
-    N = len(ans)
-    L = []
-    c = 0
-    for l in range(N):
-        line = ans[l].split(" ")[:2]
-        if int(line[0])> n:
-            l = N
-        elif int(line[0]) == c:
-            L[c -1].append(int(line[1]))
-        else:
-            c = int(line[0])
-            L.append([int(line[1])])
-
-    precision = []
-    rappel = []
-    for r in range(n):
-        calculated = manage_boolean_request(req[r][:-1])
-        supposed = L[r]
-        count = 0
-        if (calculated is None) or (calculated == []):
-            print(r + 1)
-            precision.append(0)
-            rappel.append(0)
-        else:
-            for doc in calculated:
-                if doc in supposed:
-                    count += 1
-            precision.append(count/len(calculated))
-            rappel.append(count/len(supposed))
-    return(precision, rappel)
+request_display()
