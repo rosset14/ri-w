@@ -1,5 +1,6 @@
 import os
 import re
+import json
 import math
 import matplotlib.pyplot as plt
 import numpy as np
@@ -114,23 +115,21 @@ def make_blocks_buffers():
                 next_docID += 1
                 doc_docID[docID] = str(directory)+ '/' + str(element)
                 next_termID = segmentation(lines, docID, buffer, term_termID, next_termID)
-            print(buffer)
-            buffer_file = open("../standford_buffer_" + str(directory)[0] + ".txt", 'w')
-            buffer_file.write(str(sorted(buffer)))
+            buffer_file = open("../standford_buffer_" + str(directory)[0] + ".json", 'w')
+            json.dump(sorted(buffer), buffer_file)
             buffer_file.close()
-    term_termID_file = open("../standford_termIDs.txt", 'w')
-    term_termID_file.write(str(term_termID))
+    term_termID_file = open("../standford_termIDs.json", 'w')
+    json.dump(term_termID, term_termID_file)
     term_termID_file.close()
-    doc_docID_file = open("../standford_docIDs.txt", 'w')
-    doc_docID_file.write(str(doc_docID))
+    doc_docID_file = open("../standford_docIDs.json", 'w')
+    json.dump(doc_docID, doc_docID_file)
     doc_docID_file.close()
 
 def merge_block_buffers():
     index = {}
     for i in range(10):
-        file_buffer = open("../standford_buffer_sorted_" + str(i) + ".txt", 'r')
-        buffer = eval(file_buffer.readlines()[0])
-        file_buffer.close()
+        with open("../standford_buffer_" + str(i) + ".json", 'r') as file_buffer:
+            buffer = json.load(file_buffer)
         print("file read")
         freq = 0
         docs = {}
@@ -139,9 +138,9 @@ def merge_block_buffers():
             if posting[0] != current:
                 if freq > 0:
                     if current not in index :
-                        index[current] = [freq] + [(docID, docs[docID]) for docID in docs]
+                        index[str(current)] = [freq] + [(docID, docs[docID]) for docID in docs]
                     else:
-                        index[current] = [index[current][0] + freq] + index[current][1:] + [(docID, docs[docID]) for
+                        index[str(current)] = [index[str(current)][0] + freq] + index[str(current)][1:] + [(docID, docs[docID]) for
                                                                                             docID in docs]
                 freq = 0
                 docs = {}
@@ -154,47 +153,11 @@ def merge_block_buffers():
         print("buffer read")
     for key in index:
         index[key] = [index[key][0]] + sorted(index[key][1:])
-    index_file = open("../standford_index.txt", "w")
-    index_file.write(str(index))
+    index_file = open("../standford_index.json", "w")
+    json.dump(index, index_file)
     index_file.close()
-
-
-
 
 #make_blocks_buffers()
 
-merge_block_buffers()
+#merge_block_buffers()
 
-"""for i in range(1, 10):
-    print(i)
-    file = open("../standford_buffer_" + str(i) + ".txt", 'r')
-    line = file.readlines()[0]
-    file.close()
-    postings = eval(line)
-    postings.sort()
-    sorted_file = open("../standford_buffer_sorted_" + str(i) + ".txt", 'w')
-    sorted_file.write(str(postings))
-    sorted_file.close()"""
-
-
-"""
-#création de l'index inversé
-i = index(documents)
-
-print(number_of_tokens(documents))
-print(size_of_vocabulary(i))
-
-freq = getFrequencies(i)
-freq.sort()
-freq.reverse()
-print(freq)
-
-rank = [i+1 for i in range(len(freq))]
-
-
-freqLog = [math.log(f) for f in freq]
-rankLog = [math.log(r) for r in rank]
-
-plt.plot(np.array(rankLog), np.array(freqLog))
-plt.show()
-"""
