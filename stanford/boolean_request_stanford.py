@@ -1,28 +1,23 @@
 import time
 from math import sqrt
 from nltk.stem.wordnet import WordNetLemmatizer  # pour la lemmatisation
+import json
 
 
 # IMPORT DE FICHIERS ---------------------------------------------------------------------------------------------------
 
 
 # import du dictionnaire des termes et de leurs ID
-file = open('../stanford_termsIDs.txt', 'r')
-lines = file.readlines()
-file.close()
-terms_id = eval(lines[0])
+with open('../standford_termIDs.json', 'r') as file:
+    terms_id = json.load(file)
 
 # import du dictionnaire des documents et de leurs titres
-file = open('../stanford_docIDs.txt', 'r')
-lines = file.readlines()
-file.close()
-docs_id = eval(lines[0])
+with open('../standford_docIDs.json', 'r') as file:
+    docs_id = json.load(file)
 
 # import de l'index
-file = open('../stanford_index.txt', 'r')
-lines = file.readlines()
-file.close()
-index = eval(lines[0])
+with open('../standford_index.json', 'r') as file:
+    index = json.load(file)
 
 
 number_of_documents = 88998 # quand NOT est utilisé, il faut retourner la liste complémentaire de documents
@@ -159,7 +154,7 @@ def get_posting(word):
     word = lem.lemmatize(word)
     try:
         term_id = terms_id[word]
-        posting = index[term_id][1:]
+        posting = index[str(term_id)][1:]
         for d in range(len(posting)):
             posting[d] = posting[d][0]
         return posting
@@ -276,7 +271,7 @@ def request_display():
     # print(t2 - t1)
     print("here are the documents corresponding to your request :")  # affiche le résultat
     for d in L:
-        print("     document n°" + str(d) + " : " + docs_id[d])
+        print("     document n°" + str(d) + " : " + docs_id[str(d)])
 
 
 request_display()
