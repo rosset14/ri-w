@@ -1,6 +1,7 @@
 import re
 from nltk.stem.wordnet import WordNetLemmatizer  # for lemmatization
 from multiprocessing import Process
+import json
 
 
 class Mapper(Process):
@@ -53,9 +54,8 @@ class Mapper(Process):
                         else:
                             frequencies[tok_lem] += 1
         self._buffer.extend([(term, docID, frequencies[term]) for term in frequencies])
-        output_file = open("../cacm_mapper_" + str(self._process_num) + ".txt", 'a')
-        output_file.write(str(self._buffer))
-        output_file.close()
+        with open("../cacm_mapper_" + str(self._process_num) + ".json", 'a') as output_file:
+            json.dump(self.buffer, output_file)
 
 
 class Reducer(Process):
@@ -83,9 +83,8 @@ class Reducer(Process):
             tprev = tup[0]
             total += int(tup[2])
         self._result[tprev] = [total] + postings
-        output_file = open("../cacm_reducer_" + str(self._process_num) + ".txt", "a")
-        output_file.write(str(self._result))
-        output_file.close()
+        with open("../cacm_reducer_" + str(self._process_num) + ".json", "a") as output_file:
+            json.dump(self._result, output_file)
 
 
 def getCommonWords():
@@ -103,9 +102,8 @@ lem.lemmatize("hello")
 # liste des mots courants
 common = [""] + getCommonWords()
 
-termID = open("../index_cacm.txt", 'r')
-term_termID = eval(termID.readlines()[0])
-termID.close()
+with open("../terms_cacm.json", 'r') as termID_file:
+    term_termID = json.load(termID_file)
 
 
 def mapreduce():
@@ -119,10 +117,11 @@ def mapreduce():
     t1.join()
     t2.join()
 
-    b1_file, b2_file = open("../cacm_mapper_1.txt", 'r'), open("../cacm_mapper_2.txt", 'r')
-    b = eval(b1_file.readlines()[0]) + eval(b2_file.readlines()[0])
-    b1_file.close()
-    b2_file.close()
+    b = []
+    with open("../cacm_mapper_1.json", 'r') as b1_file:
+        b += json.load(b1_file)
+    with open("../cacm_mapper_2.json", 'r') as b2_file:
+        b += json.load(b2_file)
     b.sort()
 
     split = -1
@@ -139,14 +138,14 @@ def mapreduce():
     t3.join()
     t4.join()
 
-    r3_output, r4_output = open("../cacm_reducer_3.txt", 'r'), open("../cacm_reducer_4.txt", 'r')
-    res = {**eval(r3_output.readlines()[0]), **eval(r4_output.readlines()[0])}
-    r3_output.close()
-    r4_output.close()
+    with open("../cacm_reducer_3.json", 'r') as r3_output:
+        res3 = json.load(r3_output)
+    with open("../cacm_reducer_4.json", 'r') as r4_output:
+        res4 = json.load(r4_output)
+    res = {**res3, **res4}
 
-    index_cacm = open("../index_cacm_mapreduce.txt", 'w')
-    index_cacm.write(str(res))
-    index_cacm.close()
+    with open("../index_cacm_mapreduce.json", 'w') as index_cacm:
+        json.dump(res, index_cacm)
 
 
 mapreduce()

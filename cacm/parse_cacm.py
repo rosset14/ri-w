@@ -2,6 +2,7 @@ import re
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+import json
 from nltk.stem.wordnet import WordNetLemmatizer  # pour la lemmatisation
 import time
 
@@ -80,7 +81,7 @@ def index(buffer):
     return index
 
 
-def number_of_tokens(segmetation):
+def number_of_tokens(segmentation):
     """
     determine le nombre de token de la collection
     :param segmentation:
@@ -141,17 +142,14 @@ i = index(sorted(s[0]))
 
 
 # sauvegarde de l'index inverse
-file_index = open("../index_cacm.txt", 'w')
-file_index.write(str(i))
-file_index.close()
+with open("../index_cacm.json", 'a') as file_index:
+    json.dump(i, file_index)
 # sauvegarde du dictionnaire de termes
-file_terms = open("../terms_cacm.txt", 'w')
-file_terms.write(str(term_termID))
-file_terms.close()
+with open("../terms_cacm.json", 'a') as file_terms:
+    json.dump(term_termID, file_terms)
 # sauvegarde du dictionnaire de documents
-file_docs = open("../docs_cacm.txt", 'w')
-file_docs.write(str(docID_doc))
-file_docs.close()
+with open("../docs_cacm.json", 'a') as file_docs:
+    json.dump(docID_doc, file_docs)
 
 t2 = time.time()
 

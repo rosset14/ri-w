@@ -1,27 +1,22 @@
 import time
 from math import sqrt
 from nltk.stem.wordnet import WordNetLemmatizer  # pour la lemmatisation
+import json
 
 
 # IMPORT DE FICHIERS ---------------------------------------------------------------------------------------------------
 
 # import de l'index
-file = open('../index_cacm.txt', 'r')
-lines = file.readlines()
-file.close()
-index = eval(lines[0])
+with open('../index_cacm.json', 'r') as index_file:
+    index = json.load(index_file)
 
 # import du dictionnaire des termes et de leurs ID
-file = open('../terms_cacm.txt', 'r')
-lines = file.readlines()
-file.close()
-terms_id = eval(lines[0])
+with open('../terms_cacm.json', 'r') as terms_file:
+    terms_id = json.load(terms_file)
 
 # import du dictionnaire des documents et de leurs titres
-file = open('../docs_cacm.txt', 'r')
-lines = file.readlines()
-file.close()
-docs_id = eval(lines[0])
+with open('../docs_cacm.json', 'r') as docs_file:
+    docs_id = json.load(docs_file)
 
 # import de requêtes booléennes pour l'évaluation
 file = open('../boolean_cacm_requests.txt', 'r')
@@ -168,7 +163,7 @@ def get_posting(word):
     word = lem.lemmatize(word)
     try:
         term_id = terms_id[word]
-        posting = index[term_id][1:]
+        posting = index[str(term_id)][1:]
         for d in range(len(posting)):
             posting[d] = posting[d][0]
         return posting
@@ -285,7 +280,7 @@ def request_display():
     # print(t2 - t1)
     print("here are the documents corresponding to your request :")  # affiche le résultat
     for d in L:
-        print("     document n°" + str(d) + " : " + docs_id[d])
+        print("     document n°" + str(d) + " : " + docs_id[str(d)])
 
 
 # EVALUATION / TESTS ---------------------------------------------------------------------------------------------------
