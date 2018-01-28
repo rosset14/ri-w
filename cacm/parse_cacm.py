@@ -50,6 +50,7 @@ def segmentation(lines):
                     buffer.append((termID, docID))
             if title:
                 docID_doc[docID] = line[:-1]
+                title = False
     return buffer, term_termID, docID_doc
 
 
@@ -142,13 +143,13 @@ i = index(sorted(s[0]))
 
 
 # sauvegarde de l'index inverse
-with open("../index_cacm.json", 'a') as file_index:
+with open("../index_cacm.json", 'w') as file_index:
     json.dump(i, file_index)
 # sauvegarde du dictionnaire de termes
-with open("../terms_cacm.json", 'a') as file_terms:
+with open("../terms_cacm.json", 'w') as file_terms:
     json.dump(term_termID, file_terms)
 # sauvegarde du dictionnaire de documents
-with open("../docs_cacm.json", 'a') as file_docs:
+with open("../docs_cacm.json", 'w') as file_docs:
     json.dump(docID_doc, file_docs)
 
 t2 = time.time()

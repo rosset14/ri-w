@@ -321,3 +321,5 @@ def eval():
             precision.append(count/len(calculated))
             rappel.append(count/len(supposed))
     return(precision, rappel)
+
+request_display()
