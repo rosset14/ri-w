@@ -34,8 +34,6 @@ def get_request():
     request = input("Give me a boolean request please. ex: (x AND NOT y) OR (z) ")
     return request
 
-# exemple de requête
-requestex = '(NOT single AND binary AND greater) OR (induces AND NOT international) OR (communicating)'
 
 # TRAITEMENT DES REQUETES ----------------------------------------------------------------------------------------------
 
