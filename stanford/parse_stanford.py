@@ -117,13 +117,13 @@ def make_blocks_buffers():
                 next_docID += 1
                 doc_docID[docID] = str(directory)+ '/' + str(element)
                 next_termID = segmentation(lines, docID, buffer, term_termID, next_termID)
-            buffer_file = open("../standford_buffer_" + str(directory)[0] + ".json", 'w')
+            buffer_file = open("../stanford_buffer_" + str(directory)[0] + ".json", 'w')
             json.dump(sorted(buffer), buffer_file)
             buffer_file.close()
-    term_termID_file = open("../standford_termIDs.json", 'w')
+    term_termID_file = open("../stanford_termIDs.json", 'w')
     json.dump(term_termID, term_termID_file)
     term_termID_file.close()
-    doc_docID_file = open("../standford_docIDs.json", 'w')
+    doc_docID_file = open("../stanford_docIDs.json", 'w')
     json.dump(doc_docID, doc_docID_file)
     doc_docID_file.close()
 
@@ -137,7 +137,7 @@ def merge_block_buffers():
     """
     index = {}
     for i in range(10):
-        with open("../standford_buffer_" + str(i) + ".json", 'r') as file_buffer:
+        with open("../stanford_buffer_" + str(i) + ".json", 'r') as file_buffer:
             buffer = json.load(file_buffer)
         print("file read")
         freq = 0
@@ -162,7 +162,7 @@ def merge_block_buffers():
         print("buffer read")
     for key in index:
         index[key] = [index[key][0]] + sorted(index[key][1:])
-    index_file = open("../standford_index.json", "w")
+    index_file = open("../stanford_index.json", "w")
     json.dump(index, index_file)
     index_file.close()
 

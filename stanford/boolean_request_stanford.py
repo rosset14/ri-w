@@ -8,15 +8,15 @@ import json
 
 
 # import du dictionnaire des termes et de leurs ID
-with open('../standford_termIDs.json', 'r') as file:
+with open('../stanford_termIDs.json', 'r') as file:
     terms_id = json.load(file)
 
 # import du dictionnaire des documents et de leurs titres
-with open('../standford_docIDs.json', 'r') as file:
+with open('../stanford_docIDs.json', 'r') as file:
     docs_id = json.load(file)
 
 # import de l'index
-with open('../standford_index.json', 'r') as file:
+with open('../stanford_index.json', 'r') as file:
     index = json.load(file)
 
 

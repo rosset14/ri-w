@@ -54,7 +54,7 @@ class Mapper(Process):
                         else:
                             frequencies[tok_lem] += 1
         self._buffer.extend([(term, docID, frequencies[term]) for term in frequencies])
-        with open("../cacm_mapper_" + str(self._process_num) + ".json", 'a') as output_file:
+        with open("../cacm_mapper_" + str(self._process_num) + ".json", 'w') as output_file:
             json.dump(self.buffer, output_file)
 
 
@@ -83,7 +83,7 @@ class Reducer(Process):
             tprev = tup[0]
             total += int(tup[2])
         self._result[tprev] = [total] + postings
-        with open("../cacm_reducer_" + str(self._process_num) + ".json", "a") as output_file:
+        with open("../cacm_reducer_" + str(self._process_num) + ".json", "w") as output_file:
             json.dump(self._result, output_file)
 
 
