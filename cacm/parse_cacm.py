@@ -1,7 +1,4 @@
 import re
-import math
-import numpy as np
-import matplotlib.pyplot as plt
 import json
 from nltk.stem.wordnet import WordNetLemmatizer  # pour la lemmatisation
 import time
@@ -57,7 +54,7 @@ def segmentation(lines):
 def index(buffer):
     """
     creation de l'index inverse a partir du buffer
-    :param segmentation: liste couple (token, document)
+    :param buffer: liste couple (token, document)
     :return: index inverse
     """
     index = {}
@@ -191,6 +188,4 @@ freqLog = [math.log(f) for f in freq]
 rankLog = [math.log(r) for r in rank]
 
 plt.plot(np.array(rankLog),np.array(freqLog))
-plt.show()
-
-file.close()"""
+plt.show()"""

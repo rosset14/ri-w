@@ -2,6 +2,7 @@ import re
 from nltk.stem.wordnet import WordNetLemmatizer  # for lemmatization
 from multiprocessing import Process
 import json
+import time
 
 
 class Mapper(Process):
@@ -12,7 +13,8 @@ class Mapper(Process):
         else:
             self._documents_lines = []
         self._process_num = process_num
-        self._buffer = None
+        self._bufferAM = []
+        self._bufferNZ = []
 
     def _get_documents_lines(self):
         return self._documents_lines
@@ -28,14 +30,14 @@ class Mapper(Process):
 
     def run(self):
         content = False
-        frequencies = {}
-        self._buffer = []
+        frequenciesAM, frequenciesNZ = {}, {}
         docID = -1
         for line in self._documents_lines:
             if line[:2] == ".I":
                 if docID != -1:
-                    self._buffer.extend([(term, docID, frequencies[term]) for term in frequencies])
-                    frequencies = {}
+                    self._bufferAM.extend([(term, docID, frequenciesAM[term]) for term in frequenciesAM])
+                    self._bufferNZ.extend([(term, docID, frequenciesNZ[term]) for term in frequenciesNZ])
+                    frequenciesAM, frequenciesNZ = {}, {}
                 docID = int(line[3:])
             elif line[:2] in [".T", ".W", ".K"]:  # sections de documents d'interet
                 content = True
@@ -49,13 +51,22 @@ class Mapper(Process):
                     if tok_lower not in common:
                         tok_lem = lem.lemmatize(tok_lower)
                         # on applique ensuite un traitement de lemmatisation (plusieurs sont possibles)
-                        if tok_lem not in frequencies:
-                            frequencies[tok_lem] = 1
+                        if tok_lem < "n":
+                            if tok_lem not in frequenciesAM:
+                                frequenciesAM[tok_lem] = 1
+                            else:
+                                frequenciesAM[tok_lem] += 1
                         else:
-                            frequencies[tok_lem] += 1
-        self._buffer.extend([(term, docID, frequencies[term]) for term in frequencies])
-        with open("../cacm_mapper_" + str(self._process_num) + ".json", 'w') as output_file:
-            json.dump(self.buffer, output_file)
+                            if tok_lem not in frequenciesNZ:
+                                frequenciesNZ[tok_lem] = 1
+                            else:
+                                frequenciesNZ[tok_lem] += 1
+        self._bufferAM.extend([(term, docID, frequenciesAM[term]) for term in frequenciesAM])
+        self._bufferNZ.extend([(term, docID, frequenciesNZ[term]) for term in frequenciesNZ])
+        with open("../cacm_mapper_" + str(self._process_num) + "AM.json", 'w') as output_file:
+            json.dump(self._bufferAM, output_file)
+        with open("../cacm_mapper_" + str(self._process_num) + "NZ.json", 'w') as output_file:
+            json.dump(self._bufferNZ, output_file)
 
 
 class Reducer(Process):
@@ -117,20 +128,18 @@ def mapreduce():
     t1.join()
     t2.join()
 
-    b = []
-    with open("../cacm_mapper_1.json", 'r') as b1_file:
-        b += json.load(b1_file)
-    with open("../cacm_mapper_2.json", 'r') as b2_file:
-        b += json.load(b2_file)
-    b.sort()
+    bAM, bNZ = [],[]
+    with open("../cacm_mapper_1AM.json", 'r') as b1_file:
+        bAM += json.load(b1_file)
+    with open("../cacm_mapper_2AM.json", 'r') as b1_file:
+        bAM += json.load(b1_file)
+    with open("../cacm_mapper_1NZ.json", 'r') as b2_file:
+        bNZ += json.load(b2_file)
+    with open("../cacm_mapper_2NZ.json", 'r') as b2_file:
+        bNZ += json.load(b2_file)
 
-    split = -1
-    for i in range(len(b)):
-        if b[i][0][0] >= "n":
-            split = i
-            break
 
-    t3, t4 = Reducer(3, b[:split]), Reducer(4, b[split:])
+    t3, t4 = Reducer(3, bAM), Reducer(4, bNZ)
 
     t3.start()
     t4.start()
@@ -148,4 +157,8 @@ def mapreduce():
         json.dump(res, index_cacm)
 
 
+top = time.time()
+
 mapreduce()
+
+print(time.time() - top)

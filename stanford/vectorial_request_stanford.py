@@ -19,7 +19,10 @@ def parse_query(query):
     for token in content:
         tok_lower = token.lower()
         if tok_lower not in common:
-            parsed_query.append(term_termID[lem.lemmatize(tok_lower)])
+            try:
+                parsed_query.append(term_termID[lem.lemmatize(tok_lower)])
+            except ValueError:
+                continue
     return parsed_query
 
 
@@ -41,7 +44,7 @@ def vectorial_search_cacm(query, number_of_documents):
     """
     parsed_query = parse_query(query)
     w = {-1: {}}
-    s = STANFORD_NUMBER_OF_DOCS * [0]
+    s = (STANFORD_NUMBER_OF_DOCS + 1) * [0]
     for termID in parsed_query:
         nb = parsed_query.count(termID)
         w[-1][termID] = (1 + math.log10(nb)) * math.log10(STANFORD_NUMBER_OF_DOCS / index[str(termID)][0])
@@ -68,7 +71,7 @@ def vectorial_search_cacm_normalized(query, number_of_documents):
     """
     parsed_query = parse_query(query)
     w = {-1: {"tot": 0}}
-    s = STANFORD_NUMBER_OF_DOCS * [0]
+    s = (STANFORD_NUMBER_OF_DOCS + 1) * [0]
     for termID in parsed_query:
         nb = parsed_query.count(termID)
         w[-1][termID] = (1 + math.log10(nb)) * math.log10(STANFORD_NUMBER_OF_DOCS / index[str(termID)][0])
@@ -102,7 +105,7 @@ def vectorial_search_cacm_max_normalized(query, number_of_documents):
     """
     parsed_query = parse_query(query)
     w = {-1: {"tot": 0}}
-    s = STANFORD_NUMBER_OF_DOCS * [0]
+    s = (STANFORD_NUMBER_OF_DOCS + 1) * [0]
     for termID in parsed_query:
         nb = parsed_query.count(termID)
         w[-1][termID] = nb * math.log10(STANFORD_NUMBER_OF_DOCS / index[str(termID)][0])
