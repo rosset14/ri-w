@@ -5,6 +5,9 @@ import json
 
 
 class Mapper(Process):
+    """
+       Classe représentant un mapper
+    """
     def __init__(self, first_doc_num, last_doc_num, thread_num):
         Process.__init__(self)
         self._first_doc = first_doc_num
@@ -13,6 +16,10 @@ class Mapper(Process):
         self._AE, self._FK, self._LP, self._QU, self._VZ = [], [], [], [], []
 
     def run(self):
+        """
+            Mapping des documents dans self._documents_lines. Sépare les termes en 5 ensembles selon leur place dans l'alphabet (A-E, F-K, L-P, Q-U, V-Z)
+            Cela correspond au fait qu'il y aura 5 reducers. Puis écrit les résultats dans 5 fichiers
+        """
         with open("../stanford_docIDs.json", 'r') as docID_file:
             docID_docs = json.load(docID_file)
         frequencies = {}
@@ -73,6 +80,9 @@ class Mapper(Process):
 
 
 class Reducer(Process):
+    """
+        Classe représentant un reducer
+    """
     def __init__(self, partition):
         Process.__init__(self)
         self._partition = partition
@@ -84,6 +94,9 @@ class Reducer(Process):
     result = property(_get_result)
 
     def run(self):
+        """
+            Reducing des tuples produits par les reducers correspondant à la partie d'alphabet qu'on lui attribue (A-E, F-K, L-P, Q-U, V-Z)
+        """
         tprev = None
         total = 0
         postings = []
@@ -127,6 +140,9 @@ partitions = ["AE", "FK", "LP", "QU", "VZ"]
 
 
 def map():
+    """
+    Effectue le mapping avec 5 mappers
+    """
     mappers = []
     for i in range(5):
         t = Mapper(20000*i, 20000*(i+1), i)
@@ -137,6 +153,9 @@ def map():
 
 
 def reduce():
+    """
+        Effectue le reducing avec 5 reducers
+    """
     print("toto")
     reducers = []
     for partition in partitions:
@@ -149,7 +168,9 @@ def reduce():
 
 
 def merge_index():
-    print("toto")
+    """
+    Fusionne les index partiels créés par les reducers
+    """
     merged_index = {}
     for partition in partitions:
         with open("../stanford_mapreduce_not_sorted{}.json".format(partition), 'r') as file:
@@ -159,6 +180,10 @@ def merge_index():
 
 
 def mapreduce():
+    """
+    Effectue le map/reduce.
+    :return:
+    """
     map()
     reduce()
     merge_index()

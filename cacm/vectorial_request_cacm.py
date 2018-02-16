@@ -13,9 +13,9 @@ CACM_NUMBER_OF_DOCS = 3204
 
 def parse_query(query):
     """
-    Returns the termIDs list corresponding to the terms in the query
-    :param query: the raw user query (string)
-    :return: a list of the corresponding termIDs
+    Retourne la liste de termID correspondants aux termes de la requête
+    :param query: la requête de l'utilisateur
+    :return: la liste des termIDs
     """
     parsed_query = []
     content = re.split("\W+", query)
@@ -32,7 +32,7 @@ def parse_query(query):
 def getCommonWords():
     """
     recupere la liste des mots communs afin de les retirer de l'index
-    :return:
+    :return: la liste des mots commune
     """
     commonFile = open("../common_words")
     return [s[:-1] for s in commonFile.readlines()]
@@ -40,10 +40,10 @@ def getCommonWords():
 
 def vectorial_search_cacm(query, number_of_documents):
     """
-    Retrieves the 'best' number_of_documents corresponding to the query
-    :param query: the raw user query
-    :param number_of_documents: the number of documents we want to retrieve
-    :return:
+    Retourne les meilleurs docIDs correspondant à la requête avec une recherche vectorielle
+    :param query: la requête utilisateur
+    :param number_of_documents: le nombre de documents retournés
+    :return: la liste des docIDs
     """
     parsed_query = parse_query(query)
     w = {-1: {}}
@@ -67,10 +67,10 @@ def vectorial_search_cacm(query, number_of_documents):
 
 def vectorial_search_cacm_normalized(query, number_of_documents):
     """
-    Retrieves the 'best' number_of_documents corresponding to the query
-    :param query: the raw user query
-    :param number_of_documents: the number of documents we want to retrieve
-    :return:
+    Retourne les meilleurs docIDs correspondant à la requête avec une recherche vectorielle normalisée par tf-idf
+    :param query: la requête utilisateur
+    :param number_of_documents: le nombre de documents retournés
+    :return: la liste des docIDs
     """
     parsed_query = parse_query(query)
     w = {-1: {"tot": 0}}
@@ -101,10 +101,10 @@ def vectorial_search_cacm_normalized(query, number_of_documents):
 
 def vectorial_search_cacm_max_normalized(query, number_of_documents):
     """
-    Retrieves the 'best' number_of_documents corresponding to the query
-    :param query: the raw user query
-    :param number_of_documents: the number of documents we want to retrieve
-    :return:
+    Retourne les meilleurs docIDs correspondant à la requête avec une recherche vectorielle normalisée par la fréquence maximale
+    :param query: la requête utilisateur
+    :param number_of_documents: le nombre de documents retournés
+    :return: la liste des docIDs
     """
     parsed_query = parse_query(query)
     w = {-1: {"tot": 0}}
@@ -134,6 +134,13 @@ def vectorial_search_cacm_max_normalized(query, number_of_documents):
 
 
 def evaluation(number_of_returned_docs, normalization, beta):
+    """
+    Effectue l'évaluation (rappel, précision, E-measure, F-measure) de la recherche vectorielle
+    :param number_of_returned_docs: le nombre maximal de documents retournés
+    :param normalization: le type de normalisation : 'no' si aucune, 'yes' si normalisation tf-idf, 'max' si normalisation par le maximum
+    :param beta: le paramètre beta utilisé pour calculer la E-measure
+    :return: un tuple contenant les listes de points correspondant au rappel, à la précision, la E-measure et la F-measure au rang k, 1<k<number_of_returned_docs
+    """
     if normalization not in ["no", "yes", "max"]:
         raise ValueError("Unknown normalization, use 'no', 'yes' or 'max'")
     with open("../query.text", 'r') as queries_file:
@@ -176,8 +183,8 @@ def evaluation(number_of_returned_docs, normalization, beta):
         for i in range(len(query_result["result"])):
             r = 1
             if len(query_result["expected"]) > 0:
-                r = len([doc for doc in query_result["expected"] if doc in query_result["result"][:i]])/len(query_result["expected"])
-            p = len([doc for doc in query_result["expected"] if doc in query_result["result"][:i]])/(i+1)
+                r = len([doc for doc in query_result["expected"] if doc in query_result["result"][:i+1]])/len(query_result["expected"])
+            p = len([doc for doc in query_result["expected"] if doc in query_result["result"][:i+1]])/(i+1)
             rappel.append(r)
             precision.append(p)
         for j in range(len(precision)):
@@ -192,21 +199,62 @@ def evaluation(number_of_returned_docs, normalization, beta):
     return [R[i]/nb[i] for i in range(number_of_returned_docs)], [P[i]/nb[i] for i in range(number_of_returned_docs)], [Emeasure[i]/nb[i] for i in range(number_of_returned_docs)], [Fmeasure[i]/nb[i] for i in range(number_of_returned_docs)]
 
 
-def make_chart_rappel_precision(normalization):
-    tup = evaluation(100, normalization, 1)
-    plt.plot(tup[0], tup[1])
+def make_chart_rappel_precision():
+    """
+    Trace la courbe rappel/précision
+    """
+    tupno = evaluation(100, "no", 1)
+    plt.plot(tupno[0], tupno[1], 'b')
+    tupyes = evaluation(100, "yes", 1)
+    plt.plot(tupyes[0], tupyes[1], 'r')
+    tupmax = evaluation(100, "max", 1)
+    plt.plot(tupmax[0], tupmax[1], 'g')
+    plt.xlabel("Rappel")
+    plt.ylabel("Précision")
     plt.show()
 
 
-def make_chart_Emeasure(normalization, beta=1):
-    tup = evaluation(100, normalization, beta)
-    plt.plot(range(1, len(tup[2]) + 1), tup[2])
+def make_chart_Emeasure(beta=1):
+    """
+       Trace la courbe E-measure
+    """
+    tupno = evaluation(100, "no", beta)
+    plt.plot(range(1, len(tupno[2]) + 1), tupno[2], 'b', label="Sans normalisation")
+    tupyes = evaluation(100, "yes", beta)
+    plt.plot(range(1, len(tupyes[2]) + 1), tupyes[2], 'r', label="Normalisation tf-idf")
+    tupmax = evaluation(100, "max", beta)
+    plt.plot(range(1, len(tupmax[2]) + 1), tupmax[2], 'g', label="Normalisation par le max")
+    plt.xlabel("Nombre de documents retournés")
+    plt.ylabel("E-mesure")
     plt.show()
 
 
-def make_chart_Fmeasure(normalization, beta=1):
-    tup = evaluation(100, normalization, beta)
-    plt.plot(range(1, len(tup[3]) + 1), tup[3])
+def make_chart_Fmeasure(beta=1):
+    """
+        Trace la courbe E-measure
+    """
+    tupno = evaluation(100, "no", beta)
+    plt.plot(range(1, len(tupno[3]) + 1), tupno[3], 'b', label="Sans normalisation")
+    tupyes = evaluation(100, "yes", beta)
+    plt.plot(range(1, len(tupyes[3]) + 1), tupyes[3], 'r', label="Normalisation tf-idf")
+    tupmax = evaluation(100, "max", beta)
+    plt.plot(range(1, len(tupmax[3]) + 1), tupmax[3], 'g', label="Normalisation par le max")
+    plt.xlabel("Nombre de documents retournés")
+    plt.ylabel("F-mesure")
+    plt.show()
+
+def make_chart_mean_average_precision():
+    """
+        Trace la courbe de mean average precision
+    """
+    tupno = evaluation(100, "no", 1)
+    plt.plot(range(1, len(tupno[1]) + 1), tupno[1], 'b', label="Sans normalisation")
+    tupyes = evaluation(100, "yes", 1)
+    plt.plot(range(1, len(tupyes[1]) + 1), tupyes[1], 'r', label="Normalisation tf-idf")
+    tupmax = evaluation(100, "max", 1)
+    plt.plot(range(1, len(tupmax[1]) + 1), tupmax[1], 'g', label="Normalisation par le max")
+    plt.xlabel("Nombre de documents retournés")
+    plt.ylabel("Mean average precision")
     plt.show()
 
 
@@ -221,4 +269,4 @@ with open("../index_cacm.json", 'r') as index_file:
     index = json.load(index_file)
 
 
-make_chart_Fmeasure("yes")
+make_chart_mean_average_precision()

@@ -10,9 +10,9 @@ STANFORD_NUMBER_OF_DOCS = 98997
 
 def parse_query(query):
     """
-    Returns the termIDs list corresponding to the terms in the query
-    :param query: the raw user query (string)
-    :return: a list of the corresponding termIDs
+    Retourne la liste de termID correspondants aux termes de la requête
+    :param query: la requête de l'utilisateur
+    :return: la liste des termIDs
     """
     parsed_query = []
     content = re.split("\W+", query)
@@ -29,7 +29,7 @@ def parse_query(query):
 def getCommonWords():
     """
     recupere la liste des mots communs afin de les retirer de l'index
-    :return:
+    :return: la liste des mots commune
     """
     commonFile = open("../common_words")
     return [s[:-1] for s in commonFile.readlines()]
@@ -37,10 +37,10 @@ def getCommonWords():
 
 def vectorial_search_cacm(query, number_of_documents):
     """
-    Retrieves the 'best' number_of_documents corresponding to the query
-    :param query: the raw user query
-    :param number_of_documents: the number of documents we want to retrieve
-    :return:
+    Retourne les meilleurs docIDs correspondant à la requête avec une recherche vectorielle
+    :param query: la requête utilisateur
+    :param number_of_documents: le nombre de documents retournés
+    :return: la liste des docIDs
     """
     parsed_query = parse_query(query)
     w = {-1: {}}
@@ -64,10 +64,10 @@ def vectorial_search_cacm(query, number_of_documents):
 
 def vectorial_search_cacm_normalized(query, number_of_documents):
     """
-    Retrieves the 'best' number_of_documents corresponding to the query
-    :param query: the raw user query
-    :param number_of_documents: the number of documents we want to retrieve
-    :return:
+    Retourne les meilleurs docIDs correspondant à la requête avec une recherche vectorielle normalisée par tf-idf
+    :param query: la requête utilisateur
+    :param number_of_documents: le nombre de documents retournés
+    :return: la liste des docIDs
     """
     parsed_query = parse_query(query)
     w = {-1: {"tot": 0}}
@@ -98,10 +98,10 @@ def vectorial_search_cacm_normalized(query, number_of_documents):
 
 def vectorial_search_cacm_max_normalized(query, number_of_documents):
     """
-    Retrieves the 'best' number_of_documents corresponding to the query
-    :param query: the raw user query
-    :param number_of_documents: the number of documents we want to retrieve
-    :return:
+    Retourne les meilleurs docIDs correspondant à la requête avec une recherche vectorielle normalisée par la fréquence maximale
+    :param query: la requête utilisateur
+    :param number_of_documents: le nombre de documents retournés
+    :return: la liste des docIDs
     """
     parsed_query = parse_query(query)
     w = {-1: {"tot": 0}}

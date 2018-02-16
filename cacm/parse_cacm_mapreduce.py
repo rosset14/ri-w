@@ -6,6 +6,9 @@ import time
 
 
 class Mapper(Process):
+    """
+    Classe représentant un mapper
+    """
     def __init__(self, process_num, documents_lines=None):
         Process.__init__(self)
         if documents_lines is not None:
@@ -29,6 +32,10 @@ class Mapper(Process):
     buffer = property(_get_buffer)
 
     def run(self):
+        """
+        Mapping des documents dans self._documents_lines. Sépare les termes en 2 ensembles selon leur place dans l'alphabet (A-M et N-Z)
+        Cela correspond au fait qu'il y aura 2 reducers. Puis écrit les résultats dans 2 fichiers
+        """
         content = False
         frequenciesAM, frequenciesNZ = {}, {}
         docID = -1
@@ -70,6 +77,9 @@ class Mapper(Process):
 
 
 class Reducer(Process):
+    """
+    Classe représentant un reducer
+    """
     def __init__(self, process_num, buffer):
         Process.__init__(self)
         self._buffer = buffer
@@ -82,6 +92,9 @@ class Reducer(Process):
     result = property(_get_result)
 
     def run(self):
+        """
+        Reducing des tuples produits par les reducers correspondant à la moitié d'alphabet qu'on lui attribue (A-M et N-Z)
+        """
         tprev = None
         postings = []
         total = 0
@@ -100,7 +113,7 @@ class Reducer(Process):
 
 def getCommonWords():
     """
-    recupere la liste des mots communs afin de les retirer de l'index
+    Recupere la liste des mots communs afin de les retirer de l'index
     :return:
     """
     common_file = open("../common_words", 'r')
@@ -118,6 +131,9 @@ with open("../terms_cacm.json", 'r') as termID_file:
 
 
 def mapreduce():
+    """
+    Effectue l'indexation en map/reduce de la collection CACM grâce à 2 mappers et 2 reducers. Écrit le résultat dans un fichier
+    """
     cacm = open("../cacm.all", 'r')
     lines = cacm.readlines()
     t1, t2 = Mapper(1, documents_lines=lines[:43276]), Mapper(2, documents_lines=lines[43276:])
