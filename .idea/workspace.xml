@@ -3,10 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="4a936e91-571d-4c8d-9722-e302b38c26e3" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/cacm/parse_cacm_mapreduce.py" afterPath="$PROJECT_DIR$/cacm/parse_cacm_mapreduce.py" />
-      <change beforePath="$PROJECT_DIR$/cacm/vectorial_request_cacm.py" afterPath="$PROJECT_DIR$/cacm/vectorial_request_cacm.py" />
-      <change beforePath="$PROJECT_DIR$/stanford/parse_stanford_mapreduce.py" afterPath="$PROJECT_DIR$/stanford/parse_stanford_mapreduce.py" />
-      <change beforePath="$PROJECT_DIR$/stanford/vectorial_request_stanford.py" afterPath="$PROJECT_DIR$/stanford/vectorial_request_stanford.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -23,7 +19,7 @@
       <file leaf-file-name="parse_cacm_mapreduce.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cacm/parse_cacm_mapreduce.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
+            <state relative-caret-position="961">
               <caret line="96" column="11" lean-forward="true" selection-start-line="94" selection-start-column="8" selection-end-line="96" selection-end-column="11" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
@@ -42,11 +38,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="vectorial_request_cacm.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="vectorial_request_cacm.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cacm/vectorial_request_cacm.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="116">
-              <caret line="256" column="38" lean-forward="false" selection-start-line="256" selection-start-column="38" selection-end-line="256" selection-end-column="38" />
+            <state relative-caret-position="352">
+              <caret line="308" column="6" lean-forward="true" selection-start-line="274" selection-start-column="0" selection-end-line="308" selection-end-column="6" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -54,11 +50,21 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="docs_cacm.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/docs_cacm.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="vectorial_request_stanford.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/stanford/vectorial_request_stanford.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
-              <caret line="100" column="128" lean-forward="false" selection-start-line="100" selection-start-column="128" selection-end-line="100" selection-end-column="128" />
+            <state relative-caret-position="370">
+              <caret line="157" column="0" lean-forward="false" selection-start-line="157" selection-start-column="0" selection-end-line="157" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -87,18 +93,18 @@
       <file leaf-file-name="booleen_request_cacm.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cacm/booleen_request_cacm.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="118">
-              <caret line="188" column="36" lean-forward="false" selection-start-line="188" selection-start-column="36" selection-end-line="188" selection-end-column="36" />
+            <state relative-caret-position="85">
+              <caret line="37" column="4" lean-forward="false" selection-start-line="37" selection-start-column="4" selection-end-line="37" selection-end-column="4" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="parse_cacm.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="parse_cacm.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cacm/parse_cacm.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="20" column="9" lean-forward="false" selection-start-line="20" selection-start-column="4" selection-end-line="20" selection-end-column="9" />
+            <state relative-caret-position="228">
+              <caret line="153" column="14" lean-forward="true" selection-start-line="153" selection-start-column="14" selection-end-line="153" selection-end-column="14" />
               <folding />
             </state>
           </provider>
@@ -172,8 +178,8 @@
         <option value="$PROJECT_DIR$/cacm/parse_cacm.py" />
         <option value="$PROJECT_DIR$/cacm/parse_cacm_mapreduce.py" />
         <option value="$PROJECT_DIR$/stanford/parse_stanford_mapreduce.py" />
-        <option value="$PROJECT_DIR$/stanford/vectorial_request_stanford.py" />
         <option value="$PROJECT_DIR$/cacm/vectorial_request_cacm.py" />
+        <option value="$PROJECT_DIR$/stanford/vectorial_request_stanford.py" />
       </list>
     </option>
   </component>
@@ -239,7 +245,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.vectorial_request">
+  <component name="RunManager" selected="Python.vectorial_request_stanford">
     <configuration name="boolean_request_stanford" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -258,7 +264,7 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
-    <configuration name="parse_cacm" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="booleen_request_cacm" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -270,7 +276,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="projet" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/cacm/parse_cacm.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/cacm/booleen_request_cacm.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -294,24 +300,6 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
-    <configuration name="vectorial_request (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/stanford" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="projet" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/stanford/vectorial_request_stanford.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-    </configuration>
     <configuration name="vectorial_request" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -330,20 +318,38 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
+    <configuration name="vectorial_request_stanford" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/stanford" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="projet" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/stanford/vectorial_request_stanford.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.vectorial_request (1)" />
-      <item index="1" class="java.lang.String" itemvalue="Python.boolean_request_stanford" />
-      <item index="2" class="java.lang.String" itemvalue="Python.vectorial_request" />
-      <item index="3" class="java.lang.String" itemvalue="Python.parse_cacm" />
-      <item index="4" class="java.lang.String" itemvalue="Python.parse_cacm_mapreduce" />
+      <item index="0" class="java.lang.String" itemvalue="Python.vectorial_request" />
+      <item index="1" class="java.lang.String" itemvalue="Python.parse_cacm_mapreduce" />
+      <item index="2" class="java.lang.String" itemvalue="Python.booleen_request_cacm" />
+      <item index="3" class="java.lang.String" itemvalue="Python.boolean_request_stanford" />
+      <item index="4" class="java.lang.String" itemvalue="Python.vectorial_request_stanford" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.vectorial_request" />
-        <item index="1" class="java.lang.String" itemvalue="Python.parse_cacm_mapreduce" />
-        <item index="2" class="java.lang.String" itemvalue="Python.parse_cacm" />
-        <item index="3" class="java.lang.String" itemvalue="Python.vectorial_request (1)" />
-        <item index="4" class="java.lang.String" itemvalue="Python.boolean_request_stanford" />
+        <item index="0" class="java.lang.String" itemvalue="Python.vectorial_request_stanford" />
+        <item index="1" class="java.lang.String" itemvalue="Python.vectorial_request" />
+        <item index="2" class="java.lang.String" itemvalue="Python.boolean_request_stanford" />
+        <item index="3" class="java.lang.String" itemvalue="Python.booleen_request_cacm" />
+        <item index="4" class="java.lang.String" itemvalue="Python.parse_cacm_mapreduce" />
       </list>
     </recent_temporary>
   </component>
@@ -370,7 +376,7 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24543288" sideWeight="0.49100256" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30470017" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30470017" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3241491" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -529,13 +535,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/docs_cacm.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cacm_mapper_1.txt" />
     <entry file="file://$PROJECT_DIR$/cacm_reducer_4.txt" />
     <entry file="file://$PROJECT_DIR$/terms_cacm.json">
@@ -623,22 +622,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cacm/parse_cacm.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="20" column="9" lean-forward="false" selection-start-line="20" selection-start-column="4" selection-end-line="20" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/stanford/boolean_request_stanford.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3548">
-          <caret line="18" column="18" lean-forward="false" selection-start-line="18" selection-start-column="18" selection-end-line="18" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/stanford/parse_stanford.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1995">
@@ -647,28 +630,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cacm/parse_cacm_mapreduce.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="96" column="11" lean-forward="true" selection-start-line="94" selection-start-column="8" selection-end-line="96" selection-end-column="11" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/stanford/parse_stanford_mapreduce.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="262">
           <caret line="183" column="27" lean-forward="false" selection-start-line="183" selection-start-column="27" selection-end-line="183" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cacm/booleen_request_cacm.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="118">
-          <caret line="188" column="36" lean-forward="false" selection-start-line="188" selection-start-column="36" selection-end-line="188" selection-end-column="36" />
           <folding />
         </state>
       </provider>
@@ -681,21 +646,63 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/stanford/vectorial_request_stanford.py">
+    <entry file="file://$PROJECT_DIR$/stanford/boolean_request_stanford.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="100" column="128" lean-forward="false" selection-start-line="100" selection-start-column="128" selection-end-line="100" selection-end-column="128" />
+        <state relative-caret-position="-3548">
+          <caret line="18" column="18" lean-forward="false" selection-start-line="18" selection-start-column="18" selection-end-line="18" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cacm/booleen_request_cacm.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="37" column="4" lean-forward="false" selection-start-line="37" selection-start-column="4" selection-end-line="37" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs_cacm.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cacm/vectorial_request_cacm.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="116">
-          <caret line="256" column="38" lean-forward="false" selection-start-line="256" selection-start-column="38" selection-end-line="256" selection-end-column="38" />
+        <state relative-caret-position="352">
+          <caret line="308" column="6" lean-forward="true" selection-start-line="274" selection-start-column="0" selection-end-line="308" selection-end-column="6" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stanford/vectorial_request_stanford.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="370">
+          <caret line="157" column="0" lean-forward="false" selection-start-line="157" selection-start-column="0" selection-end-line="157" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cacm/parse_cacm_mapreduce.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="961">
+          <caret line="96" column="11" lean-forward="true" selection-start-line="94" selection-start-column="8" selection-end-line="96" selection-end-column="11" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cacm/parse_cacm.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="153" column="14" lean-forward="true" selection-start-line="153" selection-start-column="14" selection-end-line="153" selection-end-column="14" />
+          <folding />
         </state>
       </provider>
     </entry>
