@@ -268,5 +268,42 @@ with open("../terms_cacm.json", 'r') as termID_file:
 with open("../index_cacm.json", 'r') as index_file:
     index = json.load(index_file)
 
+with open("../docs_cacm.json", 'r') as index_file:
+    docIDs = json.load(index_file)
 
-make_chart_mean_average_precision()
+
+def main():
+    inpt = input("Collection CACM: Do you want to do a request or to draw evaluation charts? Reply 'request' or 'charts': ")
+    if inpt == "charts":
+        c = input("Which chart do you want? Reply 'RP', 'Emeasure', 'Fmeasure' or 'MAP': ")
+        if c == 'RP':
+            make_chart_rappel_precision()
+        elif c == 'Emeasure':
+            make_chart_Emeasure()
+        elif c == 'Fmeasure':
+            make_chart_Fmeasure()
+        elif c == 'MAP':
+            make_chart_mean_average_precision()
+        else:
+            print("Error: Unknown graph")
+    elif inpt == 'request':
+        req = input("Enter your query: ")
+        norm = input("Which normalization do you want? Enter 'no' for no normalization, 'yes' for tf-idf normalization, 'max' for max frequency normalization: ")
+        if norm == 'no' :
+            docs = vectorial_search_cacm(req, 20)
+            print_docs_names(docs)
+        elif norm == "yes" :
+            docs = vectorial_search_cacm_normalized(req, 20)
+            print_docs_names(docs)
+        elif norm == "max" :
+            docs = vectorial_search_cacm_max_normalized(req, 20)
+            print_docs_names(docs)
+        else:
+            print("Unknown normalization")
+
+def print_docs_names(docs):
+    print("Here are the results:\n")
+    for docID in docs:
+        print(docIDs[str(docID)])
+
+main()

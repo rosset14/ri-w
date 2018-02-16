@@ -139,10 +139,27 @@ with open("../stanford_termIDs.json", 'r') as termID_file:
 with open("../stanford_index.json", 'r') as index_file:
     index = json.load(index_file)
 
-print("starting nlp1")
-nlp1 = vectorial_search_cacm("natural language processing", 20)
-print(nlp1)
-nlp2 = vectorial_search_cacm_normalized("natural language processing", 20)
-print(nlp2)
-nlp3 = vectorial_search_cacm_max_normalized("natural language processing", 20)
-print(nlp3)
+with open("../stanford_docIDs.json", 'r') as index_file:
+    docIDs = json.load(index_file)
+
+def main():
+    req = input("Enter your query: ")
+    norm = input("Which normalization do you want? Enter 'no' for no normalization, 'yes' for tf-idf normalization, 'max' for max frequency normalization: ")
+    if norm == 'no' :
+        docs = vectorial_search_cacm(req, 20)
+        print_docs_names(docs)
+    elif norm == "yes" :
+        docs = vectorial_search_cacm_normalized(req, 20)
+        print_docs_names(docs)
+    elif norm == "max" :
+        docs = vectorial_search_cacm_max_normalized(req, 20)
+        print_docs_names(docs)
+    else:
+        print("Unknown normalization")
+
+def print_docs_names(docs):
+    print("Here are the results:\n")
+    for docID in docs:
+        print(docIDs[str(docID)])
+
+main()
